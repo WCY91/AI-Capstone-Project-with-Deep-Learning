@@ -86,9 +86,9 @@ class LinearCNN(nn.Module):
     def __init__(self):
         super(LinearCNN,self).__init__()
         self.input_shape = 3*227*227
-        self.conv1 = nn.Conv1d(in_channels = 1,out_channels=32,kernel_size=3, stride=1)
+        self.conv1 = nn.Conv1d(in_channels = 1,out_channels=8,kernel_size=3, stride=1)
         self.flatten = nn.Flatten() #將卷積出來的結果運用在dense
-        self.fc = nn.Linear(32*(3 * 227 * 227 - 2),2)
+        self.fc = nn.Linear(8*(3 * 227 * 227 - 2),2)
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self,x):
@@ -127,7 +127,7 @@ for epoch in range(epochs):
 
     train_loss = running_loss / len(train_loader)
     train_losses.append(train_loss)
-    train_accuracy = 100 * correct / len(train_loader)
+    train_accuracy = 100 * correct / len(dataset_train)
     train_acc_.append(train_accuracy)
 
     model.eval()
@@ -141,7 +141,7 @@ for epoch in range(epochs):
             val_acc += (torch.argmax(yhat, dim=1) == y).float().sum()
         
     val_loss = val_loss / len(val_loader)
-    val_acc = 100 * val_acc / len(val_loader)
+    val_acc = 100 * val_acc / len(dataset_val)
     val_losses.append(val_loss)
     val_acc_.append(val_acc)
     print(f'Epoch {epoch + 1}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}')
